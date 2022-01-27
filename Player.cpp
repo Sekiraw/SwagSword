@@ -35,11 +35,11 @@ void MyPlayer::update(const float& dt)
 	
 	this->movementComponent->update(dt);
 
-	if (this->movementComponent->idle()) 
+	if (this->movementComponent->getState(IDLE)) 
 	{
 		this->animationComponent->play("IDLE_LEFT", dt);
 	}
-	else 
+	else if(this->movementComponent->getState(MOVING_LEFT))
 	{
 		this->animationComponent->play("WALK_LEFT", dt);
 	}
