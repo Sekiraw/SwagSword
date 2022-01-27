@@ -34,7 +34,6 @@ void AnimationComponent::play(const std::string key, const float& dt)
 			this->lastAnimation->reset();
 			this->lastAnimation = this->animations[key];
 		}
-		
 	}
 
 	this->animations[key]->play(dt);
