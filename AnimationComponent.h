@@ -33,20 +33,20 @@ private:
 
 		Animation(sf::Sprite& sprite, sf::Texture& texture_sheet, 
 			float animationTimer, 
-			int start_x, int start_y, int end_x, int end_y, int width, int height)
+			int start_frame_x, int start_frame_y, int frames_x, int frames_y, int width, int height)
 			: sprite(sprite), textureSheet(texture_sheet), 
 			animationTimer(animationTimer), width(width), height(height)
 		{
-			this->startRect = sf::IntRect(start_x, start_y, width, height);
+			this->startRect = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			this->currentRect = this->startRect;
-			this->endRect = sf::IntRect(end_x, end_y, width, height);
+			this->endRect = sf::IntRect(frames_x * width, frames_y * height, width, height);
 
 			this->sprite.setTexture(this->textureSheet, true);
 			this->sprite.setTextureRect(this->startRect);
 		}
 
 		//Functions
-		void update(const float& dt) 
+		void play(const float& dt) 
 		{
 			//Update timer
 			this->timer = 10.f * dt;
@@ -64,16 +64,20 @@ private:
 				{
 					this->currentRect.left = this->startRect.left;
 				}
+
+				this->sprite.setTextureRect(this->currentRect);
 			}
 		}
-
-		void pause();
-		void reset();
+		void reset()
+		{
+			this->timer = 0.f;
+			this->currentRect = this->startRect;
+		}
 	};
 
 	sf::Sprite& sprite;
 	sf::Texture& textureSheet;
-	std::map<std::string, Animation> animations;
+	std::map<std::string, Animation*> animations;
 
 public:
 	//Constructors / Destructors
@@ -81,13 +85,10 @@ public:
 	virtual ~AnimationComponent();
 
 	//Functions
-	void addAnimation(const std::string key);
+	void addAnimation(const std::string key, 
+		float animationTimer,
+		int start_frame_x, int start_frame_y, int frames_x, int frames_y, int width, int height);
 
-	void startAnimation(const std::string animation);
-	void pauseAnimation(const std::string animation);
-	void resetAnimation(const std::string animation);
-
-
-	void update(const float& dt);
+	void play(const std::string key, const float& dt);
 };
 
