@@ -1,7 +1,2 @@
-﻿  AnimationComponent.cpp
-  EditorState.cpp
-  Game.cpp
-  main.cpp
-  MainMenuState.cpp
-  Generating Code...
+﻿  Player.cpp
   SwagSword.vcxproj -> C:\Users\Péter\source\repos\SwagSword\x64\Debug\SwagSword.exe
