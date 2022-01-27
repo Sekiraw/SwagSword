@@ -1,0 +1,12 @@
+﻿  Button.cpp
+  Entity.cpp
+  Game.cpp
+  GameState.cpp
+  main.cpp
+  MainMenuState.cpp
+  State.cpp
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 652 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  SwagSword.vcxproj -> C:\Users\Péter\source\repos\SwagSword\x64\Release\SwagSword.exe
