@@ -2,8 +2,11 @@
 
 AnimationComponent::AnimationComponent()
 {
+
 }
 
 AnimationComponent::~AnimationComponent()
 {
+
 }
+
