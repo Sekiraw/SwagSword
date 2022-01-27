@@ -42,6 +42,7 @@ public:
 	virtual ~MovementComponent();
 
 	//Accessors
+	const float& getMaxVelocity() const;
 	const sf::Vector2f& getVelocity() const;
 
 	//Functions
