@@ -48,7 +48,7 @@ void MainMenuState::initButtons()
 	this->buttons["GAME_STATE"] = new Button(835, 350, 250, 50, //x, y, width, height
 		&this->font, "New Game", 50,
 		//Font
-		sf::Color(100, 100, 100, 200),
+		sf::Color(200, 200, 200, 200),
 		sf::Color(250, 250, 150, 250),
 		sf::Color(20, 20, 20, 50),
 		//Box
