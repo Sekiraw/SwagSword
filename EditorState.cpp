@@ -90,7 +90,7 @@ void EditorState::update(const float& dt)
 	std::cout << this->mousePosView.x << " " << this->mousePosView.y << "\n";*/
 }
 
-void EditorState::renderButtons(sf::RenderTarget* target)
+void EditorState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& it : this->buttons) {
 		it.second->render(target);
@@ -102,7 +102,7 @@ void EditorState::render(sf::RenderTarget* target)
 	if (!target)
 		target = this->window;
 
-	this->renderButtons(target);
+	this->renderButtons(*target);
 
 	//REMOVE LATER!!
 	sf::Text mouseText;

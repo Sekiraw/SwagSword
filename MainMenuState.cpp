@@ -160,7 +160,7 @@ void MainMenuState::update(const float& dt)
 	std::cout << this->mousePosView.x << " " << this->mousePosView.y << "\n";*/
 }
 
-void MainMenuState::renderButtons(sf::RenderTarget* target)
+void MainMenuState::renderButtons(sf::RenderTarget& target)
 {
 	for (auto& it : this->buttons) {
 		it.second->render(target);
@@ -174,7 +174,7 @@ void MainMenuState::render(sf::RenderTarget* target)
 
 	target->draw(this->background);
 
-	this->renderButtons(target);
+	this->renderButtons(*target);
 
 	//REMOVE LATER!!
 	sf::Text mouseText;
