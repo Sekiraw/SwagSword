@@ -1,6 +1,7 @@
 #include "AnimationComponent.h"
 
-AnimationComponent::AnimationComponent()
+AnimationComponent::AnimationComponent(sf::Sprite& sprite, sf::Texture& texture_sheet)
+	: sprite(sprite), textureSheet(texture_sheet)
 {
 
 }
