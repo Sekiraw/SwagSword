@@ -21,9 +21,18 @@ MyPlayer::MyPlayer(float x, float y, sf::Texture& texture_sheet)
 	this->createMovementComponent(300.f, 15.f, 5.f);
 	this->createAnimationComponent(texture_sheet);
 
-	this->animationComponent->addAnimation("IDLE_LEFT", 100.f, 0, 0, 13, 0, 195, 219);
+	this->animationComponent->addAnimation("IDLE_LEFT", 10.f, 0, 0, 13, 0, 192, 192);
 }
 
 MyPlayer::~MyPlayer()
 {
+}
+
+//Functions
+void MyPlayer::update(const float& dt)
+{
+	
+	this->movementComponent->update(dt);
+
+	this->animationComponent->play("IDLE_LEFT", dt);
 }

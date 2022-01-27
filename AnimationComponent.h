@@ -37,6 +37,7 @@ private:
 			: sprite(sprite), textureSheet(texture_sheet), 
 			animationTimer(animationTimer), width(width), height(height)
 		{
+			this->timer = 0.f;
 			this->startRect = sf::IntRect(start_frame_x * width, start_frame_y * height, width, height);
 			this->currentRect = this->startRect;
 			this->endRect = sf::IntRect(frames_x * width, frames_y * height, width, height);
@@ -49,7 +50,7 @@ private:
 		void play(const float& dt) 
 		{
 			//Update timer
-			this->timer = 10.f * dt;
+			this->timer += 100.f * dt;
 			if (this->timer >= this->animationTimer)
 			{
 				//reset timer
