@@ -1,8 +1,8 @@
-﻿  Entity.cpp
+﻿  AnimationComponent.cpp
+  Entity.cpp
   Game.cpp
   GameState.cpp
   MainMenuState.cpp
-  MovementComponent.cpp
   Player.cpp
   State.cpp
   main.cpp
