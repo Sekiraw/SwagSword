@@ -16,7 +16,6 @@ AnimationComponent::~AnimationComponent()
 
 
 //Functions
-
 void AnimationComponent::addAnimation(const std::string key,
 	float animationTimer,
 	int start_frame_x, int start_frame_y, int frames_x, int frames_y, int width, int height)
