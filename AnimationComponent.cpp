@@ -26,33 +26,88 @@ void AnimationComponent::addAnimation(const std::string key,
 
 void AnimationComponent::play(const std::string key, const float& dt, const bool priority)
 {
-	if (this->lastAnimation != this->animations[key]) 
-	{
-		if (this->lastAnimation == NULL) {
-			this->lastAnimation = this->animations[key];
-		}
-		else {
-			this->lastAnimation->reset();
-			this->lastAnimation = this->animations[key];
+	
+	if (this->priorityAnimation) { //If there is a priority animation
+		if (this->priorityAnimation == this->animations[key]) {
+			if (this->lastAnimation != this->animations[key])
+			{
+				if (this->lastAnimation == NULL) {
+					this->lastAnimation = this->animations[key];
+				}
+				else {
+					this->lastAnimation->reset();
+					this->lastAnimation = this->animations[key];
+				}
+			}
+			//If the prior animation is done remove it
+			if (this->animations[key]->play(dt)) {
+				this->priorityAnimation = NULL;
+			}
 		}
 	}
+	else { //Play animation if no other prior animation is set
 
-	this->animations[key]->play(dt);
+		//If this is a prior animation, set it.
+		if (priority)
+		{
+			this->priorityAnimation = this->animations[key];
+		}
+		if (this->lastAnimation != this->animations[key])
+		{
+			if (this->lastAnimation == NULL) {
+				this->lastAnimation = this->animations[key];
+			}
+			else {
+				this->lastAnimation->reset();
+				this->lastAnimation = this->animations[key];
+			}
+		}
+
+		if (this->animations[key]->play(dt)) {
+			this->priorityAnimation = NULL;
+		}
+	}
 }
-
 
 void AnimationComponent::play(const std::string key, const float& dt, const float& modifier, const float& modifier_max, const bool priority)
 {
-	if (this->lastAnimation != this->animations[key])
-	{
-		if (this->lastAnimation == NULL) {
-			this->lastAnimation = this->animations[key];
-		}
-		else {
-			this->lastAnimation->reset();
-			this->lastAnimation = this->animations[key];
+	if (this->priorityAnimation) { //If there is a priority animation
+		if (this->priorityAnimation == this->animations[key]) {
+			if (this->lastAnimation != this->animations[key])
+			{
+				if (this->lastAnimation == NULL) {
+					this->lastAnimation = this->animations[key];
+				}
+				else {
+					this->lastAnimation->reset();
+					this->lastAnimation = this->animations[key];
+				}
+			}
+
+			if (this->animations[key]->play(dt, abs(modifier / modifier_max)))
+			{
+				this->priorityAnimation = NULL;
+			}
 		}
 	}
+	else { //Play animation if no other prior animation is set
 
-	this->animations[key]->play(dt, abs(modifier / modifier_max));
+		//If this is a prior animation, set it.
+		if (priority)
+		{
+			this->priorityAnimation = this->animations[key];
+		}
+		if (this->lastAnimation != this->animations[key])
+		{
+			if (this->lastAnimation == NULL) {
+				this->lastAnimation = this->animations[key];
+			}
+			else {
+				this->lastAnimation->reset();
+				this->lastAnimation = this->animations[key];
+			}
+		}
+
+		this->animations[key]->play(dt, abs(modifier / modifier_max));
+	}
 }

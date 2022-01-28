@@ -5,6 +5,7 @@ class MyPlayer :
 {
 private:
 	//Variables
+	bool attacking;
 
 	//Initializer functions
 	void initVariables();
