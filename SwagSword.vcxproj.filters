@@ -70,6 +70,9 @@
       <Filter>Tile</Filter>
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,6 +114,9 @@
       <Filter>Tile</Filter>
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

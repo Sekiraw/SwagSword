@@ -42,12 +42,11 @@ Button::~Button()
 
 const bool Button::isPressed() const
 {
-	if (this->buttonState == BTN_ACTIVE) {
+	if (this->buttonState == BTN_ACTIVE) 
 		return true;
-	}
-	else {
-		return false;
-	}
+	
+	return false;
+	
 }
 
 //Accessors

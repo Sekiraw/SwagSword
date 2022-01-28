@@ -10,7 +10,6 @@ public:
 
 private:
 	sf::Font font;
-
 	PauseMenu* pmenu;
 
 	//Functions

@@ -1,7 +1,10 @@
-﻿  Game.cpp
+﻿  Button.cpp
+  EditorState.cpp
+  Game.cpp
   GameState.cpp
   MainMenuState.cpp
   PauseMenu.cpp
+  SettingsState.cpp
   main.cpp
   Generating Code...
   SwagSword.vcxproj -> C:\Users\Peter.DESKTOP-V6T2TCT\source\repos\SwagSword\x64\Debug\SwagSword.exe
