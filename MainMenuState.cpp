@@ -14,7 +14,7 @@ void MainMenuState::initBackground()
 	)
 	);
 
-	if (!this->backgroundTexture.loadFromFile("Resources/Images/Backgrounds/backg.png")) {
+	if (!this->backgroundTexture.loadFromFile("Resources/Images/Backgrounds/b.jpg")) {
 		throw"ERROR::MAINMENUSTATE::FAILED_TO_LOAD_BACKGROUND_TEXTURE";
 	}
 	this->background.setTexture(&this->backgroundTexture);
@@ -45,10 +45,10 @@ void MainMenuState::initKeybinds()
 }
 void MainMenuState::initButtons()
 {
-	this->buttons["GAME_STATE"] = new Button(835.f, 350.f, 250.f, 50.f, //x, y, width, height
+	this->buttons["GAME_STATE"] = new gui::Button(835.f, 350.f, 250.f, 50.f, //x, y, width, height
 		&this->font, "New Game", 50,
 		//Font
-		sf::Color(200, 200, 200, 200),
+		sf::Color(100, 100, 100, 200),
 		sf::Color(250, 250, 150, 250),
 		sf::Color(20, 20, 20, 50),
 		//Box
@@ -56,7 +56,7 @@ void MainMenuState::initButtons()
 		sf::Color(150, 150, 150, 0), 
 		sf::Color(20, 20, 20, 0));
 
-	this->buttons["SETTINGS_STATE"] = new Button(835.f, 425.f, 250.f, 50.f,
+	this->buttons["SETTINGS_STATE"] = new gui::Button(835.f, 425.f, 250.f, 50.f,
 		&this->font, "Settings", 50,
 		//Font
 		sf::Color(100, 100, 100, 200),
@@ -67,7 +67,7 @@ void MainMenuState::initButtons()
 		sf::Color(150, 150, 150, 0), 
 		sf::Color(20, 20, 20, 0));
 
-	this->buttons["EDITOR_STATE"] = new Button(835.f, 500.f, 250.f, 50.f, 
+	this->buttons["EDITOR_STATE"] = new gui::Button(835.f, 500.f, 250.f, 50.f,
 		&this->font, "Editor", 50,
 		//Font
 		sf::Color(100, 100, 100, 200),
@@ -78,7 +78,7 @@ void MainMenuState::initButtons()
 		sf::Color(150, 150, 150, 0),
 		sf::Color(20, 20, 20, 0));
 
-	this->buttons["EXIT"] = new Button(835.f, 575.f, 250.f, 50.f,
+	this->buttons["EXIT"] = new gui::Button(835.f, 575.f, 250.f, 50.f,
 		&this->font, "Quit", 50,
 		//Font
 		sf::Color(100, 100, 100, 200),

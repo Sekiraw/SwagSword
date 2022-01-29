@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Button.h"
+#include "Gui.h"
 
 #include<vector>
 #include<iostream>
@@ -31,7 +31,7 @@ private:
 	sf::Font& font;
 	sf::Text menuText;
 
-	std::map<std::string, Button*> buttons;
+	std::map<std::string, gui::Button*> buttons;
 
 	//Private functions
 	
@@ -41,7 +41,7 @@ public:
 	virtual ~PauseMenu();
 
 	//Accessor
-	std::map<std::string, Button*>& getButtons();
+	std::map<std::string, gui::Button*>& getButtons();
 
 	//Functions
 	const bool isButtonPressed(const std::string key);

@@ -1,10 +1,12 @@
-﻿  Button.cpp
-  EditorState.cpp
+﻿  EditorState.cpp
   Game.cpp
   GameState.cpp
+  Gui.cpp
   MainMenuState.cpp
   PauseMenu.cpp
   SettingsState.cpp
+C:\Users\Peter.DESKTOP-V6T2TCT\source\repos\SwagSword\SwagSword\Gui.cpp(195,3): warning C4267:  'argument': conversion from 'size_t' to 'unsigned short', possible loss of data
   main.cpp
   Generating Code...
+C:\Users\Peter.DESKTOP-V6T2TCT\source\repos\SwagSword\SwagSword\SettingsState.cpp(55,120): warning C4267:  'argument': conversion from 'size_t' to 'unsigned int', possible loss of data
   SwagSword.vcxproj -> C:\Users\Peter.DESKTOP-V6T2TCT\source\repos\SwagSword\x64\Debug\SwagSword.exe
