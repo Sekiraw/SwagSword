@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "HitboxComponent.h"
 
 HitboxComponent::HitboxComponent(sf::Sprite& sprite, 

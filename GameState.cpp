@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "GameState.h"
 
 //Initializer functions
@@ -128,6 +129,8 @@ void GameState::render(sf::RenderTarget* target)
 {
 	if (!target) 
 		target = this->window;
+
+	//this->map.render(*target);
 
 	if (myplayer)
 		this->myplayer->render(*target);

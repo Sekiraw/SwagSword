@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "MovementComponent.h"
 
 MovementComponent::MovementComponent(sf::Sprite& sprite, 

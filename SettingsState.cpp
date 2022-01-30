@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "SettingsState.h"
 
 //Initializer functions

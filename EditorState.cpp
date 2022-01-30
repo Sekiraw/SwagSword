@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "EditorState.h"
 
 //Initializer functions

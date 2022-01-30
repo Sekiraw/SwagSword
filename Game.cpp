@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "Game.h"
 
 //Static funcions

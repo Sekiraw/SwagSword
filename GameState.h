@@ -1,6 +1,7 @@
 #pragma once
 #include "State.h"
 #include"PauseMenu.h"
+#include"TileMap.h"
 
 class GameState :
 	public State
@@ -11,6 +12,8 @@ public:
 private:
 	sf::Font font;
 	PauseMenu* pmenu;
+
+	TileMap map;
 
 	//Functions
 	void initFonts();

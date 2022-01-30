@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "MainMenuState.h"
 
 //Initializer functions

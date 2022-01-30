@@ -1,3 +1,4 @@
+#include"precom.h"
 #include "Player.h"
 
 //Initializer functions
