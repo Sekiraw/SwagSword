@@ -6,7 +6,7 @@ class Game
 private:
 	//Variables
 	GraphicsSettings gfxSettings;
-
+	StateData stateData;
 	sf::RenderWindow *window;
 	sf::Event e;
 
@@ -17,12 +17,16 @@ private:
 
 	std::map<std::string, int> supportedKeys;
 
+	float gridSize;
+
 	//Initializations
 	void initVariables();
 	void initGraphicsSettings();
 	void initWindow();
 	void initStates();
 	void initKeys();
+	void initStateData();
+
 public:
 	//Constructors/Destructors
 	Game();

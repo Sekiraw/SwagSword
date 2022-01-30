@@ -42,12 +42,12 @@ void GameState::initPauseMenu()
 
 void GameState::initPlayers()
 {
-	myplayer = new MyPlayer(0, 0, this->textures["PLAYER_SHEET"]);
+	myplayer = new MyPlayer(800, 400, this->textures["PLAYER_SHEET"]);
 }
 
 //Constructors / Destructors
-GameState::GameState(sf::RenderWindow* window, std::map<std::string, int>* supportedKeys, std::stack<State*>* states)
-	: State(window, supportedKeys, states)
+GameState::GameState(StateData* state_data)
+	: State(state_data)
 	, myplayer(nullptr)
 {
 	this->initFonts();
