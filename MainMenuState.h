@@ -16,6 +16,12 @@ private:
 
 	std::map<std::string, gui::Button*>buttons;
 
+	//Test
+	/*bool epress;
+	bool dpress;
+	bool ipress;
+	bool editor;*/
+
 	//Functions
 	void initVariables();
 	void initBackground();

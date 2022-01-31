@@ -4,6 +4,10 @@
 //Initializer functions
 void MainMenuState::initVariables()
 {
+	/*this->epress = false;
+	this->dpress = false;
+	this->ipress = false;
+	this->editor = false;*/
 }
 
 void MainMenuState::initBackground()
@@ -111,7 +115,19 @@ MainMenuState::~MainMenuState() {
 //Functions
 void MainMenuState::updateInput(const float& dt)
 {
-
+	/*if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+	{
+		this->epress = true;
+		std::cout << "epress true" << "\n";
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && this->epress)
+	{
+		this->dpress = true;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I) && this->dpress)
+	{
+		this->editor = true;
+	}*/
 	
 }
 
@@ -135,9 +151,11 @@ void MainMenuState::updateButtons()
 	}
 
 	//Editor
-	if (this->buttons["EDITOR_STATE"]->isPressed()) {
-		this->states->push(new EditorState(this->stateData));
-	}
+	/*if (this->editor) {*/
+		if (this->buttons["EDITOR_STATE"]->isPressed()) {
+			this->states->push(new EditorState(this->stateData));
+		}
+	/*}*/
 
 	//Quit the game
 	if (this->buttons["EXIT"]->isPressed()) {
