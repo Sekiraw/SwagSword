@@ -47,7 +47,7 @@ void GameState::initPlayers()
 
 void GameState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10);
+	this->tileMap = new TileMap(this->stateData->gridSize, 10, 10, "Resources/Images/Tiles/tilesheet1.png");
 }
 
 //Constructors / Destructors
@@ -126,7 +126,7 @@ void GameState::update(const float& dt)
 	}
 	else //Paused update
 	{
-		this->pmenu->update(this->mousePosView);
+		this->pmenu->update(this->mousePosWindow);
 		this->updatePauseMenuButtons();
 	}
 }
