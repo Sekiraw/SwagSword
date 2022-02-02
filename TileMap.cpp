@@ -1,13 +1,40 @@
 #include"precom.h"
 #include "TileMap.h"
 
-void TileMap::clear()
+TileMap* TileMap::ms_pInstance;
+
+void TileMap::SetDefaultTexture(std::string& texture)
+{
+	m_Config.texture_file = texture;
+}
+
+void TileMap::SetLayer(uint32_t layer)
+{
+	m_Config.layers = layer;
+}
+
+void TileMap::SetVectorX(uint32_t vx)
+{
+	m_Config.size.x = vx;
+}
+
+void TileMap::SetVectorY(uint32_t vy)
+{
+	m_Config.size.y = vy;
+}
+
+void TileMap::SetGridSize(float gs)
+{
+	m_Config.gridSize = gs;
+}
+
+__forceinline void TileMap::Clear()
 {
 	for (size_t x = 0; x < this->maxSize.x; x++)
 	{
 		for (size_t y = 0; y < this->maxSize.y; y++)
 		{
-			for (size_t z = 0; z < this->layers; z++)
+			for (size_t z = 0; z < m_Config.layers; z++)
 			{
 				delete this->map[x][y][z];
 				this->map[x][y][z] = nullptr;
@@ -22,15 +49,21 @@ void TileMap::clear()
 	//std::cout << this->map.size() << "\n";
 }
 
-TileMap::TileMap(float gridSize, unsigned width, unsigned height, std::string texture_file)
+TileMap::TileMap()
 {
-	this->gridSizeF = gridSize;
-	this->gridSizeU = static_cast<unsigned>(this->gridSizeF);
+	ms_pInstance = this;
+	std::memset(&m_Config, 0, sizeof(TConfig));
+}
+
+bool TileMap::InitializeTileMap(float gridSize, uint32_t width, uint32_t height, std::string texture_file)
+{
+	this->gridSizeFl = gridSize;
+	this->gridSizeI = static_cast<int>(this->gridSizeFl);
 	this->maxSize.x = width;
 	this->maxSize.y = height;
-	this->layers = 1;
-	this->textureFile = texture_file;
-	
+	m_Config.layers = 1;
+	m_Config.texture_file = texture_file;
+
 	this->map.resize(this->maxSize.x, std::vector<std::vector<Tile*> >());
 	for (size_t x = 0; x < this->maxSize.x; x++)
 	{
@@ -38,26 +71,29 @@ TileMap::TileMap(float gridSize, unsigned width, unsigned height, std::string te
 		{
 			this->map[x].resize(this->maxSize.y, std::vector<Tile*>());
 
-			for (size_t z = 0; z < this->layers; z++)
+			for (size_t z = 0; z < GetLayers(); z++)
 			{
-				this->map[x][y].resize(this->layers, NULL);
+				this->map[x][y].resize(GetLayers(), NULL);
 			}
 		}
 	}
 
 	this->tileSheet.loadFromFile(texture_file);
+	this->loadFromFile("Maps/text.slmp");
 
+	return true;
 }
 
 TileMap::~TileMap()
 {
-	this->clear();
+	ms_pInstance = nullptr;
+	Clear();
 }
 
 //Accessors
 const sf::Texture* TileMap::getTileSheet() const
 {
-	return &this->tileSheet;
+	return &tileSheet;
 }
 
 //Functions
@@ -82,15 +118,15 @@ void TileMap::saveToFile(const std::string file_name)
 	if (out_file.is_open())
 	{
 		out_file << this->maxSize.x << " " << this->maxSize.y << "\n"
-			<< this->gridSizeU << "\n"
-			<< this->layers << "\n"
+			<< this->gridSizeI << "\n"
+			<< GetLayers() << "\n"
 			<< this->textureFile << "\n";
 
 		for (size_t x = 0; x < this->maxSize.x; x++)
 		{
 			for (size_t y = 0; y < this->maxSize.y; y++)
 			{
-				for (size_t z = 0; z < this->layers; z++)
+				for (size_t z = 0; z < GetLayers(); z++)
 				{
 					if(this->map[x][y][z])
 						out_file << x << " " << y << " " << z << " " << this->map[x][y][z]->getAsString() << " "; //MAKE SURE THIS LAST SPACE IS NOT SAVED!
@@ -127,30 +163,26 @@ void TileMap::loadFromFile(const std::string file_name)
 	in_file.open(file_name);
 	if (in_file.is_open())
 	{
-		sf::Vector2u size;
-		unsigned gridSize = 0;
-		unsigned layers = 0;
-		std::string texture_file = "";
-		unsigned x = 0;
-		unsigned y = 0;
-		unsigned z = 0;
-		unsigned trX = 0;
-		unsigned trY = 0;
-		bool collision = false;
-		short type = 0;
-
+		
 		//Basics
-		in_file >> size.x >> size.y >> gridSize >> layers >> texture_file;
+		in_file >> m_Config.size.x >> m_Config.size.y >> m_Config.gridSize >> m_Config.layers >> textureFile;
 
 		//Tiles
-		this->gridSizeF = static_cast<float>(gridSize);
-		this->gridSizeU = gridSize;
-		this->maxSize.x = size.x;
-		this->maxSize.y = size.y;
-		this->layers = layers;
-		this->textureFile = texture_file;
+		/*std::cout << size.x << " x" << "\n";				- it gets the gridsize
+		std::cout << size.y << " y" << "\n";
+		std::cout << gridSize << " grid" << "\n";*/
 
-		this->clear();
+		auto layer = GetLayers();
+
+		gridSizeFl = m_Config.gridSize; // 0xC0000005: Access violation writing location 0x0000000000000008.
+		gridSizeI = m_Config.gridSize;
+		maxSize.x = m_Config.size.x;
+		maxSize.y = m_Config.size.y;
+		layer = m_Config.layers;
+		//textureFile = m_Config.texture_file;
+		SetDefaultTexture(textureFile);
+
+		//this->clear();
 
 		this->map.resize(this->maxSize.x, std::vector<std::vector<Tile*> >());
 		for (size_t x = 0; x < this->maxSize.x; x++)
@@ -159,22 +191,22 @@ void TileMap::loadFromFile(const std::string file_name)
 			{
 				this->map[x].resize(this->maxSize.y, std::vector<Tile*>());
 
-				for (size_t z = 0; z < this->layers; z++)
+				for (size_t z = 0; z < layer; z++)
 				{
-					this->map[x][y].resize(this->layers, NULL);
+					this->map[x][y].resize(layer, NULL);
 				}
 			}
 		}
 
-		this->tileSheet.loadFromFile(texture_file);
+		this->tileSheet.loadFromFile(GetTextureFile());
 
 		//Load all tiles
-		while (in_file >> x >> y >> z >> trX >> trY >> collision >> type)
+		while (in_file >> m_Config.x >> m_Config.y >> m_Config.z >> m_Config.trX >> m_Config.trY >> m_Config.collision >> m_Config.type)
 		{
-			this->map[x][y][z] = new Tile(
-				x, y, gridSizeF, 
-				this->tileSheet, sf::IntRect(trX, trY, this->gridSizeU, this->gridSizeU), 
-				collision, type
+			this->map[m_Config.x][m_Config.y][m_Config.z] = new Tile(
+				m_Config.x, m_Config.y, gridSizeFl,
+				this->tileSheet, sf::IntRect(m_Config.trX, m_Config.trY, this->gridSizeI, this->gridSizeI),
+				m_Config.collision, m_Config.type
 			);
 		}
 	}
@@ -186,15 +218,13 @@ void TileMap::loadFromFile(const std::string file_name)
 	in_file.close();
 }
 
-void TileMap::addTile(const unsigned x, const unsigned y, const unsigned z, const sf::IntRect& texture_rect, const bool& collision, const short& type)
+void TileMap::addTile(const uint32_t x, const uint32_t y, const uint32_t z, const sf::IntRect& texture_rect, const bool& collision, const int16_t& type)
 {
 	/*
 		Take two indicies from the mouse position in the grid and add a tile to that position if the internal tilemap array allows it.
 	*/
 
-	if (x < this->maxSize.x && x >= 0 && 
-		y < this->maxSize.y && y >= 0 && 
-		z < this->layers && z >= 0)
+	if (x < this->maxSize.x && x >= 0 &&  y < this->maxSize.y && y >= 0 && z < GetLayers() && z >= 0)
 	{
 		if (this->map[x][y][z] == nullptr)
 		{
@@ -202,7 +232,7 @@ void TileMap::addTile(const unsigned x, const unsigned y, const unsigned z, cons
 				OK to add tile.
 			*/
 
-			this->map[x][y][z] = new Tile(x, y, this->gridSizeF, this->tileSheet, texture_rect, collision, type);
+			this->map[x][y][z] = new Tile(x, y, this->gridSizeFl, this->tileSheet, texture_rect, collision, type);
 			//std::cout << "Added valid tile" << "\n";
 			
 		}
@@ -211,7 +241,7 @@ void TileMap::addTile(const unsigned x, const unsigned y, const unsigned z, cons
 
 }
 
-void TileMap::removeTile(const unsigned x, const unsigned y, const unsigned z)
+void TileMap::removeTile(const uint32_t x, const uint32_t y, const uint32_t z)
 {
 	/*
 		Take three indicies from the mouse position in the grid and remove at that position if the internal tilemap array allows it.
@@ -219,7 +249,7 @@ void TileMap::removeTile(const unsigned x, const unsigned y, const unsigned z)
 
 	if (x < this->maxSize.x && x >= 0 &&
 		y < this->maxSize.y && y >= 0 &&
-		z < this->layers && z >= 0)
+		z < GetLayers() && z >= 0)
 	{
 		if (this->map[x][y][z] != nullptr)
 		{

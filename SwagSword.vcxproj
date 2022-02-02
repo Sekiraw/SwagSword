@@ -156,6 +156,7 @@
     </ClCompile>
     <ClCompile Include="SettingsState.cpp" />
     <ClCompile Include="State.cpp" />
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="Tile.cpp" />
     <ClCompile Include="TileMap.cpp" />
   </ItemGroup>
@@ -175,6 +176,7 @@
     <ClInclude Include="precom.h" />
     <ClInclude Include="SettingsState.h" />
     <ClInclude Include="State.h" />
+    <ClInclude Include="test.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="TileMap.h" />
   </ItemGroup>

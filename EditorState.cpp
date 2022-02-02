@@ -11,19 +11,19 @@ void EditorState::initVariables()
 
 	this->collision = false;
 	this->type = TileTypes::DEFAULT;
-	this->cameraSpeed = 100.f;
+	this->cameraSpeed = 1000.f;
 }
 
 void EditorState::initView()
 {
 	this->view.setSize(
 		sf::Vector2f(
-			this->stateData->gfxSettings->resolution.width, 
-			this->stateData->gfxSettings->resolution.height
+			static_cast<float>(this->stateData->gfxSettings->resolution.width),
+			static_cast<float>(this->stateData->gfxSettings->resolution.height)
 		));
 	this->view.setCenter(
-		this->stateData->gfxSettings->resolution.width / 2.f,
-		this->stateData->gfxSettings->resolution.height / 2.f
+		static_cast<float>(this->stateData->gfxSettings->resolution.width) / 2.f,
+		static_cast<float>(this->stateData->gfxSettings->resolution.height) / 2.f
 	);
 }
 
@@ -100,7 +100,9 @@ void EditorState::initGui()
 }
 void EditorState::initTileMap()
 {
-	this->tileMap = new TileMap(this->stateData->gridSize, 20, 20, "Resources/Images/Tiles/tilesheet1.png");
+	//this->tileMap = new TileMap(this->stateData->gridSize, 20, 20, "Resources/Images/Tiles/tilesheet1.png");
+	this->tileMap = new TileMap();
+	TileMap::GetTileMap().InitializeTileMap(TileMap::GetTileMap().GetGridSize(), TileMap::GetTileMap().GetVectorX(), TileMap::GetTileMap().GetVectorY(), TileMap::GetTileMap().GetTextureFile());
 }
 EditorState::EditorState(StateData* state_data)
 	: State(state_data)
@@ -257,13 +259,17 @@ void EditorState::updateGui(const float& dt)
 void EditorState::updatePauseMenuButtons()
 {
 	if (this->pmenu->isButtonPressed("QUIT"))
+	{
+		this->tileMap->saveToFile("Maps/save.slmp");
 		this->endState();
+	}
 
 	if (this->pmenu->isButtonPressed("SAVE"))
-		this->tileMap->saveToFile("text.slmp");
+		this->tileMap->saveToFile("Maps/text.slmp");
 
-	if (this->pmenu->isButtonPressed("LOAD"))
-		this->tileMap->loadFromFile("text.slmp");
+	if (this->pmenu->isButtonPressed("LOAD")) {
+		this->tileMap->loadFromFile("Maps/text.slmp");
+	}
 }
 
 void EditorState::update(const float& dt)
@@ -303,13 +309,18 @@ void EditorState::renderButtons(sf::RenderTarget& target)
 
 void EditorState::renderGui(sf::RenderTarget& target)
 {
-	if(!this->textureSelector->getActive())
+	if (!this->textureSelector->getActive())
+	{
+		target.setView(this->view);
 		target.draw(this->selectorRect);
-
+	}
+	target.setView(this->window->getDefaultView());
 	this->textureSelector->render(target);
-	target.draw(this->cursorText);
-
 	target.draw(this->sidebar);
+
+	target.setView(this->view);
+	target.draw(this->cursorText);
+	
 }
 
 void EditorState::render(sf::RenderTarget* target)
@@ -321,11 +332,12 @@ void EditorState::render(sf::RenderTarget* target)
 	this->tileMap->render(*target);
 
 	target->setView(this->window->getDefaultView());
-
 	this->renderButtons(*target);
+
 	this->renderGui(*target);
 
 	if (this->paused) {
+		target->setView(this->window->getDefaultView());
 		this->pmenu->render(*target);
 	}
 
