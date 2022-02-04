@@ -1,6 +1,7 @@
 #pragma once
 #include "Tile.h"
 #include <cassert>
+#include "Entity.h"
 
 class TileMap
 {
@@ -28,6 +29,7 @@ public:
 	{
 		std::string texture_file;
 		sf::Vector2u size;
+		
 
 		float gridSize;
 		uint32_t layers;
@@ -47,6 +49,7 @@ public:
 
 	//Accessors
 	const sf::Texture* getTileSheet() const;
+	const sf::RectangleShape* getCollisionBox() const;
 
 	//Functions
 	void addTile(const uint32_t x, const uint32_t y, const uint32_t z, const sf::IntRect& texture_rect, const bool& collision, const int16_t& type);
@@ -54,8 +57,10 @@ public:
 	void saveToFile(const std::string file_name);
 	void loadFromFile(const std::string file_name);
 
+	void updateCollision(Entity* entity);
+
 	void update();
-	void render(sf::RenderTarget& target);
+	void render(sf::RenderTarget& target, Entity* entity = nullptr);
 
 	// Callback
 	std::string GetTextureFile() const
@@ -83,6 +88,7 @@ public:
 		return m_Config.layers;
 	}
 
+
 	// Run Event
 
 	void SetDefaultTexture(std::string& texture);
@@ -98,6 +104,7 @@ public:
 	//unsigned layers;
 	std::vector<std::vector<std::vector< Tile* > > > map;
 	sf::Texture tileSheet;
+	sf::RectangleShape collisionBox;
 
 	// File Content
 	std::string textureFile = "";

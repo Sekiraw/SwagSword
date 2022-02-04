@@ -72,7 +72,7 @@ void GameState::initPauseMenu()
 
 void GameState::initPlayers()
 {
-	myplayer = new MyPlayer(1100, 700, this->textures["PLAYER_SHEET"]);
+	myplayer = new MyPlayer(this->pPositionX, this->pPositionY, this->textures["PLAYER_SHEET"]);
 }
 
 void GameState::initTileMap()
@@ -81,6 +81,31 @@ void GameState::initTileMap()
 	TileMap::GetTileMap().InitializeTileMap(TileMap::GetTileMap().GetGridSize(), TileMap::GetTileMap().GetVectorX(), TileMap::GetTileMap().GetVectorY(), TileMap::GetTileMap().GetTextureFile());
 	//this->stateData->gridSize, 10, 10, tileMap->texture_file
 	//this->tileMap->loadFromFile("text.slmp");
+}
+
+//Get the player's starting position
+void GameState::initPlayerPosition(std::string& file_name)
+{
+	this->pPositionX = 0;
+	this->pPositionY = 0;
+
+	std::ifstream in_file;
+	in_file.open(file_name);
+	if (in_file.is_open())
+	{
+
+		//Basics
+		in_file >> this->pPositionX >> this->pPositionY;
+		std::cout << "pos_x: " << this->pPositionX << "\n";
+		std::cout << "pos_y: " << this->pPositionY << "\n";
+	}
+	else
+	{
+		std::cout << "ERROR::GAMESTATE::COULD NOT LOAD PLAYER POSITION::FILENAME: " << file_name << "\n";
+	}
+
+	in_file.close();
+
 }
 
 //Constructors / Destructors
@@ -95,6 +120,9 @@ GameState::GameState(StateData* state_data)
 	this->initTextures();
 	this->initPauseMenu();
 
+	std::string file_location = "Saves/PlayerPosition.ini";
+	this->initPlayerPosition(file_location);
+
 	this->initPlayers();
 	this->initTileMap();
 }
@@ -105,6 +133,22 @@ GameState::~GameState() {
 }
 
 //Functions
+void GameState::updatePlayerStartingPosition(std::string& file_name)
+{
+	std::ofstream out_file;
+	out_file.open(file_name);
+	if (out_file.is_open())
+	{
+		out_file << myplayer->getPosition().x << " " << myplayer->getPosition().y;
+	}
+	else
+	{
+		std::cout << "ERROR::GAMESTATE::COULD NOT SAVE PLAYER POSITION::FILENAME: " << "Saves/PlayerPosition.ini" << "\n";
+	}
+
+	out_file.close();
+}
+
 void GameState::updateView(const float& dt)
 {
 	this->view.setCenter(this->myplayer->getPosition());
@@ -152,7 +196,11 @@ void GameState::updatePlayerInput(const float& dt)
 void GameState::updatePauseMenuButtons()
 {
 	if (this->pmenu->isButtonPressed("QUIT"))
+	{
+		std::string file_location = "Saves/Playerposition.ini";
+		this->updatePlayerStartingPosition(file_location);
 		this->endState();
+	}
 }
 
 void GameState::update(const float& dt)
@@ -160,6 +208,7 @@ void GameState::update(const float& dt)
 	this->updateMousePositions(&this->view);
 	this->updateKeyTime(dt);
 	this->updateInput(dt);
+	//this->getPlayerPosition();
 
 	if (!this->paused) //Unpaused update
 	{ 

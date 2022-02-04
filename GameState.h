@@ -17,6 +17,9 @@ public:
 	MyPlayer* myplayer;
 	TileMap* tileMap;
 
+	float pPositionX;
+	float pPositionY;
+
 private:
 	sf::View view;
 	sf::RenderTexture renderTexture;
@@ -36,12 +39,17 @@ private:
 	void initPauseMenu();
 	void initPlayers();
 	void initTileMap();
+	void initPlayerPosition(std::string& file_name);
 
 public:
 	GameState(StateData* state_data);
 	virtual ~GameState();
 
+	//Accessors
+	//void getPlayerPosition();
+
 	//Functions
+	void updatePlayerStartingPosition(std::string& file_name);
 	void updateView(const float& dt);
 	void updateInput(const float& dt);
 	void updatePlayerInput(const float& dt);

@@ -32,6 +32,8 @@ private:
 
 	sf::IntRect textureRect;
 
+
+
 	bool collision;
 	short type;
 	float cameraSpeed;

@@ -81,6 +81,11 @@ bool TileMap::InitializeTileMap(float gridSize, uint32_t width, uint32_t height,
 	this->tileSheet.loadFromFile(texture_file);
 	this->loadFromFile("Maps/text.slmp");
 
+	this->collisionBox.setSize(sf::Vector2f(gridSize, gridSize));
+	this->collisionBox.setFillColor(sf::Color(255, 0, 0, 50));
+	this->collisionBox.setOutlineColor(sf::Color::Red);
+	this->collisionBox.setOutlineThickness(1.f);
+
 	return true;
 }
 
@@ -94,6 +99,11 @@ TileMap::~TileMap()
 const sf::Texture* TileMap::getTileSheet() const
 {
 	return &tileSheet;
+}
+
+const sf::RectangleShape* TileMap::getCollisionBox() const
+{
+	return &collisionBox;
 }
 
 //Functions
@@ -218,6 +228,8 @@ void TileMap::loadFromFile(const std::string file_name)
 	in_file.close();
 }
 
+
+
 void TileMap::addTile(const uint32_t x, const uint32_t y, const uint32_t z, const sf::IntRect& texture_rect, const bool& collision, const int16_t& type)
 {
 	/*
@@ -265,14 +277,17 @@ void TileMap::removeTile(const uint32_t x, const uint32_t y, const uint32_t z)
 	}
 }
 
+void TileMap::updateCollision(Entity* entity)
+{
 
+}
 
 void TileMap::update()
 {
 
 }
 
-void TileMap::render(sf::RenderTarget& target)
+void TileMap::render(sf::RenderTarget& target, Entity* entity)
 {
 	for (auto& x : this->map)
 	{
@@ -280,8 +295,15 @@ void TileMap::render(sf::RenderTarget& target)
 		{
 			for (auto* z : y)
 			{
-				if(z != nullptr)
+				if (z != nullptr)
+				{
 					z->render(target);
+					if (z->getCollision())
+					{
+						this->collisionBox.setPosition(z->getPosition());
+						target.draw(this->collisionBox);
+					}
+				}	
 			}
 		}
 	}
