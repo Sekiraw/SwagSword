@@ -30,9 +30,9 @@ void TileMap::SetGridSize(float gs)
 
 __forceinline void TileMap::Clear()
 {
-	for (size_t x = 0; x < this->maxSize.x; x++)
+	for (size_t x = 0; x < this->maxSizeWorldGrid.x; x++)
 	{
-		for (size_t y = 0; y < this->maxSize.y; y++)
+		for (size_t y = 0; y < this->maxSizeWorldGrid.y; y++)
 		{
 			for (size_t z = 0; z < m_Config.layers; z++)
 			{
@@ -59,17 +59,19 @@ bool TileMap::InitializeTileMap(float gridSize, uint32_t width, uint32_t height,
 {
 	this->gridSizeFl = gridSize;
 	this->gridSizeI = static_cast<int>(this->gridSizeFl);
-	this->maxSize.x = width;
-	this->maxSize.y = height;
+	this->maxSizeWorldGrid.x = width;
+	this->maxSizeWorldGrid.y = height;
+	this->maxSizeWorldF.x = static_cast<float>(width) * gridSize;
+	this->maxSizeWorldF.y = static_cast<float>(height) * gridSize;
 	m_Config.layers = 1;
 	m_Config.texture_file = texture_file;
 
-	this->map.resize(this->maxSize.x, std::vector<std::vector<Tile*> >());
-	for (size_t x = 0; x < this->maxSize.x; x++)
+	this->map.resize(this->maxSizeWorldGrid.x, std::vector<std::vector<Tile*> >());
+	for (size_t x = 0; x < this->maxSizeWorldGrid.x; x++)
 	{
-		for (size_t y = 0; y < this->maxSize.y; y++)
+		for (size_t y = 0; y < this->maxSizeWorldGrid.y; y++)
 		{
-			this->map[x].resize(this->maxSize.y, std::vector<Tile*>());
+			this->map[x].resize(this->maxSizeWorldGrid.y, std::vector<Tile*>());
 
 			for (size_t z = 0; z < GetLayers(); z++)
 			{
@@ -127,14 +129,14 @@ void TileMap::saveToFile(const std::string file_name)
 	out_file.open(file_name);
 	if (out_file.is_open())
 	{
-		out_file << this->maxSize.x << " " << this->maxSize.y << "\n"
+		out_file << this->maxSizeWorldGrid.x << " " << this->maxSizeWorldGrid.y << "\n"
 			<< this->gridSizeI << "\n"
 			<< GetLayers() << "\n"
 			<< this->textureFile << "\n";
 
-		for (size_t x = 0; x < this->maxSize.x; x++)
+		for (size_t x = 0; x < this->maxSizeWorldGrid.x; x++)
 		{
-			for (size_t y = 0; y < this->maxSize.y; y++)
+			for (size_t y = 0; y < this->maxSizeWorldGrid.y; y++)
 			{
 				for (size_t z = 0; z < GetLayers(); z++)
 				{
@@ -186,20 +188,20 @@ void TileMap::loadFromFile(const std::string file_name)
 
 		gridSizeFl = m_Config.gridSize; // 0xC0000005: Access violation writing location 0x0000000000000008.
 		gridSizeI = m_Config.gridSize;
-		maxSize.x = m_Config.size.x;
-		maxSize.y = m_Config.size.y;
+		maxSizeWorldGrid.x = m_Config.size.x;
+		maxSizeWorldGrid.y = m_Config.size.y;
 		layer = m_Config.layers;
 		//textureFile = m_Config.texture_file;
 		SetDefaultTexture(textureFile);
 
 		//this->clear();
 
-		this->map.resize(this->maxSize.x, std::vector<std::vector<Tile*> >());
-		for (size_t x = 0; x < this->maxSize.x; x++)
+		this->map.resize(this->maxSizeWorldGrid.x, std::vector<std::vector<Tile*> >());
+		for (size_t x = 0; x < this->maxSizeWorldGrid.x; x++)
 		{
-			for (size_t y = 0; y < this->maxSize.y; y++)
+			for (size_t y = 0; y < this->maxSizeWorldGrid.y; y++)
 			{
-				this->map[x].resize(this->maxSize.y, std::vector<Tile*>());
+				this->map[x].resize(this->maxSizeWorldGrid.y, std::vector<Tile*>());
 
 				for (size_t z = 0; z < layer; z++)
 				{
@@ -236,7 +238,7 @@ void TileMap::addTile(const uint32_t x, const uint32_t y, const uint32_t z, cons
 		Take two indicies from the mouse position in the grid and add a tile to that position if the internal tilemap array allows it.
 	*/
 
-	if (x < this->maxSize.x && x >= 0 &&  y < this->maxSize.y && y >= 0 && z < GetLayers() && z >= 0)
+	if (x < this->maxSizeWorldGrid.x && x >= 0 &&  y < this->maxSizeWorldGrid.y && y >= 0 && z < GetLayers() && z >= 0)
 	{
 		if (this->map[x][y][z] == nullptr)
 		{
@@ -259,8 +261,8 @@ void TileMap::removeTile(const uint32_t x, const uint32_t y, const uint32_t z)
 		Take three indicies from the mouse position in the grid and remove at that position if the internal tilemap array allows it.
 	*/
 
-	if (x < this->maxSize.x && x >= 0 &&
-		y < this->maxSize.y && y >= 0 &&
+	if (x < this->maxSizeWorldGrid.x && x >= 0 &&
+		y < this->maxSizeWorldGrid.y && y >= 0 &&
 		z < GetLayers() && z >= 0)
 	{
 		if (this->map[x][y][z] != nullptr)
@@ -279,7 +281,25 @@ void TileMap::removeTile(const uint32_t x, const uint32_t y, const uint32_t z)
 
 void TileMap::updateCollision(Entity* entity)
 {
+	//World Bounds
+	if (entity->getPosition().x < 0.f)
+	{
+		entity->setPosition(0.f, entity->getPosition().y);
+	}
+	else if (entity->getPosition().x > this->maxSizeWorldF.x)
+	{
+		entity->setPosition(this->maxSizeWorldF.x, entity->getPosition().y);
+	}
+	if (entity->getPosition().y < 0.f)
+	{
+		entity->setPosition(entity->getPosition().x, 0.f);
+	}
+	else if (entity->getPosition().y > this->maxSizeWorldF.y)
+	{
+		entity->setPosition(this->maxSizeWorldF.x, this->maxSizeWorldF.y);
+	}
 
+	//Tiles
 }
 
 void TileMap::update()

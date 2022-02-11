@@ -4,6 +4,11 @@
 
 //Initializer functions
 
+void GameState::initVariables()
+{
+	this->positionFileLocation = "Saves/PlayerPosition.ini";
+}
+
 void GameState::initDeferredRender()
 {
 	this->renderTexture.create(
@@ -113,6 +118,7 @@ GameState::GameState(StateData* state_data)
 	: State(state_data)
 	, myplayer(nullptr)
 {
+	this->initVariables();
 	this->initDeferredRender();
 	this->initView();
 	this->initFonts();
@@ -120,8 +126,7 @@ GameState::GameState(StateData* state_data)
 	this->initTextures();
 	this->initPauseMenu();
 
-	std::string file_location = "Saves/PlayerPosition.ini";
-	this->initPlayerPosition(file_location);
+	this->initPlayerPosition(this->positionFileLocation);
 
 	this->initPlayers();
 	this->initTileMap();
@@ -151,7 +156,8 @@ void GameState::updatePlayerStartingPosition(std::string& file_name)
 
 void GameState::updateView(const float& dt)
 {
-	this->view.setCenter(this->myplayer->getPosition());
+	//Floor it for not messing up the blocks spaces ? idk its complicated
+	this->view.setCenter(std::floor(this->myplayer->getPosition().x), std::floor(this->myplayer->getPosition().y));
 }
 
 
@@ -197,10 +203,15 @@ void GameState::updatePauseMenuButtons()
 {
 	if (this->pmenu->isButtonPressed("QUIT"))
 	{
-		std::string file_location = "Saves/Playerposition.ini";
-		this->updatePlayerStartingPosition(file_location);
+		this->updatePlayerStartingPosition(this->positionFileLocation);
 		this->endState();
 	}
+}
+
+void GameState::updateTileMap(const float& dt)
+{
+	this->tileMap->update();
+	this->tileMap->updateCollision(this->myplayer);
 }
 
 void GameState::update(const float& dt)
@@ -216,6 +227,8 @@ void GameState::update(const float& dt)
 		this->updatePlayerInput(dt);
 
 		this->myplayer->update(dt);
+
+		this->updateTileMap(dt);
 	}
 	else //Paused update
 	{

@@ -100,7 +100,8 @@ public:
 public:
 	float gridSizeFl = 0.f;
 	int gridSizeI = 0;
-	sf::Vector2u maxSize;
+	sf::Vector2u maxSizeWorldGrid;
+	sf::Vector2f maxSizeWorldF;
 	//unsigned layers;
 	std::vector<std::vector<std::vector< Tile* > > > map;
 	sf::Texture tileSheet;

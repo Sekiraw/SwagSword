@@ -26,8 +26,8 @@ namespace gui
 		sf::Color outlineIdleColor;
 		sf::Color outlineHoverColor;
 		sf::Color outlineActiveColor;
-/*
-		sf::Texture buttonTexture;*/
+
+		sf::Texture buttonTexture;
 
 
 	public:

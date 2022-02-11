@@ -152,21 +152,22 @@ void EditorState::updateInput(const float& dt)
 void EditorState::updateEditorInput(const float& dt)
 {
 	//Move view
+	//Floor here for the block space thing
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_CAMERA_UP"))))
 	{
-		this->view.move(0.f, -this->cameraSpeed * dt);
+		this->view.move(0.f, -std::floor(this->cameraSpeed * dt));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_CAMERA_DOWN"))))
 	{
-		this->view.move(0.f, this->cameraSpeed * dt);
+		this->view.move(0.f, std::floor(this->cameraSpeed * dt));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_CAMERA_LEFT"))))
 	{
-		this->view.move(-this->cameraSpeed * dt, 0.f);
+		this->view.move(-std::floor(this->cameraSpeed) * dt, 0.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key(this->keybinds.at("MOVE_CAMERA_RIGHT"))))
 	{
-		this->view.move(this->cameraSpeed * dt, 0.f);
+		this->view.move(std::floor(this->cameraSpeed) * dt, 0.f);
 	}
 	
 

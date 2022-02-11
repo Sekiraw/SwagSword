@@ -28,9 +28,12 @@ private:
 	sf::Font font;
 	PauseMenu* pmenu;
 
+	std::string positionFileLocation;
+
 	
 
 	//Initializer functions
+	void initVariables();
 	void initDeferredRender();
 	void initView();
 	void initFonts();
@@ -54,6 +57,7 @@ public:
 	void updateInput(const float& dt);
 	void updatePlayerInput(const float& dt);
 	void updatePauseMenuButtons();
+	void updateTileMap(const float& dt);
 	void update(const float& dt);
 	void render(sf::RenderTarget* target = NULL);
 };

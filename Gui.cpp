@@ -47,11 +47,15 @@ gui::Button::Button(float x, float y, float width, float height,
 	this->outlineHoverColor = outline_hover_color;
 	this->outlineActiveColor = outline_active_color;
 
-	//if (this->buttonTexture.loadFromFile("Resources/Images/Sprites/Buttons/btn.png"))
-	//	this->shape.setTexture(&this->buttonTexture);
-	//else 
-	//	std::cout << "FAILED TO LOAD BUTTON TEXTURE" << std::endl;
-	//
+	if (this->buttonTexture.loadFromFile("Resources/Images/Sprites/Buttons/btn2.png"))
+	{
+		std::cout << "Point" << "\n";
+		this->shape.setTexture(&this->buttonTexture);
+	}
+	else
+	{
+		std::cout << "FAILED TO LOAD BUTTON TEXTURE" << std::endl;
+	}
 
 }
 
