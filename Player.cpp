@@ -20,8 +20,8 @@ MyPlayer::MyPlayer(float x, float y, sf::Texture& texture_sheet)
 
 	this->setPosition(x, y);
 
-	this->createHitboxComponent(this->sprite, 86.f, 70.f, 86.f, 111.f);
-	this->createMovementComponent(350, 14.f, 8.f);
+	//this->createHitboxComponent(this->sprite, 86.f, 70.f, 86.f, 111.f);
+	this->createMovementComponent(140, 14.f, 10.f);
 	this->createAnimationComponent(texture_sheet);
 
 	this->animationComponent->addAnimation("IDLE", 11.f, 0, 0, 13, 0, 192, 192);
@@ -109,5 +109,5 @@ void MyPlayer::update(const float& dt)
 
 	this->updateAnimation(dt);
 
-	this->hitboxComponent->update();
+	//this->hitboxComponent->update();
 }

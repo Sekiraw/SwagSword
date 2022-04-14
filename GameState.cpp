@@ -228,7 +228,8 @@ void GameState::update(const float& dt)
 
 		this->myplayer->update(dt);
 
-		this->updateTileMap(dt);
+		// collision is buggy
+		//this->updateTileMap(dt);
 	}
 	else //Paused update
 	{
